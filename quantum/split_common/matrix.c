@@ -42,6 +42,13 @@ extern matrix_row_t matrix[MATRIX_ROWS];      // debounced values
 // row offsets for each hand
 uint8_t thisHand, thatHand;
 
+//attempt to make the balance feature
+static uint8_t left_change = 0;
+static uint8_t right_change = 0;
+
+uint8_t get_current_right(void) { return right_change; }
+uint8_t get_current_left(void) { return left_change; }
+
 // user-defined overridable functions
 __attribute__((weak)) void matrix_slave_scan_user(void) {}
 
@@ -308,5 +315,9 @@ uint8_t matrix_scan(void) {
     debounce(raw_matrix, matrix + thisHand, ROWS_PER_HAND, local_changed);
 
     bool remote_changed = matrix_post_scan();
+    if(remote_changed)
+        left_change += 1;
+    if(local_changed)
+        right_change += 1;
     return (uint8_t)(local_changed || remote_changed);
 }

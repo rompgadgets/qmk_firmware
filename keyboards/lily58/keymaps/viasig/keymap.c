@@ -26,6 +26,8 @@ enum layer_number {
   _ADJUST,
 };
 
+char wpm_str[15];
+
 #define RAISE MO(_RAISE)
 #define LOWER MO(_LOWER)
 
@@ -241,6 +243,12 @@ void oled_task_user(void) {
     oled_write_ln(read_keylog(), false);
     oled_write_ln(read_keylogs(), false);
 
+#ifdef WPM_ENABLE
+    // Write WPM
+    //sprintf(wpm_str, "WPM: %03d L: %03d R: %03d", get_current_wpm(), get_current_left(), get_current_right());
+    sprintf(wpm_str, "L: %03d R: %03d", get_current_left(), get_current_right());
+    oled_write_ln(wpm_str, false);
+#endif
   } else {
       render_logo();
   }

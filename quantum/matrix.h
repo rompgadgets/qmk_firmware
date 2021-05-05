@@ -74,6 +74,9 @@ void matrix_scan_kb(void);
 void matrix_init_user(void);
 void matrix_scan_user(void);
 
+uint8_t get_current_right(void);
+uint8_t get_current_left(void);
+
 #ifdef __cplusplus
 }
 #endif
