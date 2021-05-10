@@ -221,9 +221,10 @@ const char *read_keylogs(void) {
 void oled_task_user(void) {
   if (is_keyboard_master()) {
     // Host Keyboard Layer Status
-    oled_write_P(PSTR("Layer: "), false);
+    //oled_write_P(PSTR("Layer: "), false);
+    //oled_write_ln_P(PSTR("Left: "), false);
 
-    switch (get_highest_layer(layer_state)) {
+    /*switch (get_highest_layer(layer_state)) {
     case _QWERTY:
         oled_write_ln_P(PSTR("Default"), false);
         break;
@@ -242,12 +243,42 @@ void oled_task_user(void) {
 
     oled_write_ln(read_keylog(), false);
     oled_write_ln(read_keylogs(), false);
-
+*/
 #ifdef WPM_ENABLE
     // Write WPM
     //sprintf(wpm_str, "WPM: %03d L: %03d R: %03d", get_current_wpm(), get_current_left(), get_current_right());
-    sprintf(wpm_str, "L: %03d R: %03d", get_current_left(), get_current_right());
-    oled_write_ln(wpm_str, false);
+    //sprintf(wpm_str, "L: %03d R: %03d", get_current_left(), get_current_right());
+    //oled_write_ln(wpm_str, false);
+    // first atempt on page 4 of the OLED
+
+    /*oled_set_cursor(get_current_left()%20, 1);
+    oled_write_char(255, true);
+    oled_advance_page(true);
+    oled_write_ln_P(PSTR("Right: "), false);
+    oled_set_cursor(get_current_right()%20, 3);
+    oled_write_char(255, true);
+    oled_advance_page(true);
+    */
+    uint8_t i,j = 0;
+    uint8_t pagelimit = 2;
+    uint8_t leftbar = get_current_left() % OLED_DISPLAY_WIDTH; 
+    uint8_t rightbar = get_current_right() % OLED_DISPLAY_WIDTH; 
+    if(leftbar == 0 || rightbar == 0)
+    {
+      oled_clear();
+    }
+    for(j = 0; j < pagelimit; j++)
+    {
+      for(i = 0; i < leftbar; i++)
+      {
+        oled_write_raw_byte(255, i + (j * OLED_DISPLAY_WIDTH));
+      } 
+
+      for(i = 0; i < rightbar; i++)
+      {
+        oled_write_raw_byte(255, i + ((j+2) * OLED_DISPLAY_WIDTH));
+      }
+    }
 #endif
   } else {
       render_logo();

@@ -315,9 +315,11 @@ uint8_t matrix_scan(void) {
     debounce(raw_matrix, matrix + thisHand, ROWS_PER_HAND, local_changed);
 
     bool remote_changed = matrix_post_scan();
+
     if(remote_changed)
         left_change += 1;
     if(local_changed)
         right_change += 1;
+
     return (uint8_t)(local_changed || remote_changed);
 }
