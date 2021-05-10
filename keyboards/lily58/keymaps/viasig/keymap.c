@@ -265,18 +265,42 @@ void oled_task_user(void) {
     uint8_t rightbar = get_current_right() % OLED_DISPLAY_WIDTH; 
     if(leftbar == 0 || rightbar == 0)
     {
-      oled_clear();
-    }
-    for(j = 0; j < pagelimit; j++)
-    {
-      for(i = 0; i < leftbar; i++)
+      if(leftbar == 0) 
       {
-        oled_write_raw_byte(255, i + (j * OLED_DISPLAY_WIDTH));
-      } 
+        for(j = 0; j < pagelimit; j++)
+        {
+          for(i = 0; i < OLED_DISPLAY_WIDTH; i++)
+          {
+            oled_write_raw_byte(0, i + (j * OLED_DISPLAY_WIDTH));
+          } 
+        }
+      }
 
-      for(i = 0; i < rightbar; i++)
+      if(rightbar == 0)
       {
-        oled_write_raw_byte(255, i + ((j+2) * OLED_DISPLAY_WIDTH));
+        for(j = 0; j < pagelimit; j++)
+        {
+          for(i = 0; i < OLED_DISPLAY_WIDTH; i++)
+          {
+            oled_write_raw_byte(0, i + ((j+2) * OLED_DISPLAY_WIDTH));
+          }
+        }
+        //oled_clear();
+      }
+    }
+    else
+    {
+      for(j = 0; j < pagelimit; j++)
+      {
+        for(i = 0; i < leftbar; i++)
+        {
+          oled_write_raw_byte(255, i + (j * OLED_DISPLAY_WIDTH));
+        } 
+
+        for(i = 0; i < rightbar; i++)
+        {
+          oled_write_raw_byte(255, i + ((j+2) * OLED_DISPLAY_WIDTH));
+        }
       }
     }
 #endif
